@@ -46,7 +46,7 @@ export async function confirmParticipant(app: FastifyInstance) {
       if (participantUpdated.is_confirmed === false) {
         throw new ClientError('Error when confirming participant.')
       }
-      return reply.redirect(`${env.WEB_BASE_URL}//trips/${participant.trip_id}`)
+      return reply.redirect(`${env.WEB_BASE_URL}/trips/${participant.trip_id}`)
     },
   )
 }
