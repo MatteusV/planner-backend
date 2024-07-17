@@ -47,6 +47,6 @@ app.register(getParticipant)
 app.register(deleteParticipant)
 app.register(deleteLink)
 
-app.listen({ port: env.PORT ?? 3000 }).then(() => {
+app.listen({ port: env.PORT ?? 8080 }).then(() => {
   console.log('Server is running')
 })
