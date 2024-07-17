@@ -15,6 +15,7 @@ export async function createInvite(app: FastifyInstance) {
       schema: {
         body: z.object({
           email: z.string().email(),
+          name: z.string().nullable(),
         }),
 
         params: z.object({
@@ -22,8 +23,8 @@ export async function createInvite(app: FastifyInstance) {
         }),
       },
     },
-    async (request) => {
-      const { email } = request.body
+    async (request, reply) => {
+      const { email, name } = request.body
       const { tripId } = request.params
 
       const trip = await prisma.trip.findUnique({
@@ -40,6 +41,7 @@ export async function createInvite(app: FastifyInstance) {
         data: {
           email,
           trip_id: tripId,
+          name: name ?? null,
         },
       })
 
@@ -76,8 +78,7 @@ export async function createInvite(app: FastifyInstance) {
       })
 
       console.log(nodemailer.getTestMessageUrl(message))
-
-      return { participantId: participant.id }
+      return reply.status(201).send({ participantId: participant.id })
     },
   )
 }

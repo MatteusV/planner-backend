@@ -19,7 +19,7 @@ export async function createLink(app: FastifyInstance) {
         }),
       },
     },
-    async (request) => {
+    async (request, reply) => {
       const { title, url } = request.body
       const { tripId } = request.params
 
@@ -40,8 +40,7 @@ export async function createLink(app: FastifyInstance) {
           trip_id: tripId,
         },
       })
-
-      return { linkId: link.id }
+      return reply.status(201).send({ linkId: link.id })
     },
   )
 }

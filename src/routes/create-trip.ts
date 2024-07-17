@@ -24,7 +24,7 @@ export async function createTrip(app: FastifyInstance) {
         }),
       },
     },
-    async (request) => {
+    async (request, reply) => {
       const {
         destination,
         ends_at,
@@ -102,7 +102,7 @@ export async function createTrip(app: FastifyInstance) {
 
       console.log(nodemailer.getTestMessageUrl(message))
 
-      return { tripId: trip.id }
+      return reply.status(201).send({ tripId: trip.id })
     },
   )
 }

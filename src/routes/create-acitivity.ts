@@ -20,10 +20,9 @@ export async function createActivity(app: FastifyInstance) {
         }),
       },
     },
-    async (request) => {
+    async (request, reply) => {
       const { occurs_at, title } = request.body
       const { tripId } = request.params
-
       const trip = await prisma.trip.findUnique({
         where: {
           id: tripId,
@@ -34,11 +33,17 @@ export async function createActivity(app: FastifyInstance) {
         throw new ClientError('Trip not found.')
       }
 
+      console.log({
+        tripStart: trip.starts_at,
+        occurs_at,
+        tripEnd: trip.ends_at,
+      })
+
       if (dayjs(occurs_at).isBefore(trip.starts_at)) {
         throw new ClientError('Invalid activity date.')
       }
 
-      if (dayjs(occurs_at).isBefore(trip.ends_at)) {
+      if (dayjs(occurs_at).isAfter(trip.ends_at)) {
         throw new ClientError('Invalid activity date.')
       }
 
@@ -50,7 +55,7 @@ export async function createActivity(app: FastifyInstance) {
         },
       })
 
-      return { activityId: activity.id }
+      return reply.status(201).send({ activityId: activity.id })
     },
   )
 }
