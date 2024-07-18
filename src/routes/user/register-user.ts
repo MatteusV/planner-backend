@@ -48,9 +48,8 @@ export async function registerUser(app: FastifyInstance) {
           path: '/',
           secure: true,
           sameSite: true,
-          httpOnly: true,
         })
-        .status(200)
+        .status(201)
         .send({
           token,
         })
