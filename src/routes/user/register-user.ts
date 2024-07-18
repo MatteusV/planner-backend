@@ -35,6 +35,7 @@ export async function registerUser(app: FastifyInstance) {
       }
 
       const token = await reply.jwtSign({ sign: { sub: user.id } })
+
       const refreshToken = await reply.jwtSign({
         sign: {
           sub: user.id,
