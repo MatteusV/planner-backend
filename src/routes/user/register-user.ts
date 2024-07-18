@@ -15,9 +15,6 @@ export async function registerUser(app: FastifyInstance) {
           email: z.string().email(),
           password: z.string().min(4),
         }),
-        headers: z.object({
-          userId: z.string().uuid(),
-        }),
       },
     },
     async (request, reply) => {
