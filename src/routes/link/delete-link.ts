@@ -1,24 +1,24 @@
 import { FastifyInstance } from 'fastify'
 import { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod'
-import { prisma } from '../lib/prisma'
+import { prisma } from '../../lib/prisma'
 
-export async function deleteParticipant(app: FastifyInstance) {
+export async function deleteLink(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().delete(
-    '/participants/:participantId',
+    '/links/:linkId',
     {
       schema: {
         params: z.object({
-          participantId: z.string().uuid(),
+          linkId: z.string().uuid(),
         }),
       },
     },
     async (request, reply) => {
-      const { participantId } = request.params
+      const { linkId } = request.params
 
-      await prisma.participant.delete({
+      await prisma.link.delete({
         where: {
-          id: participantId,
+          id: linkId,
         },
       })
 

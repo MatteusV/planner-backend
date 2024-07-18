@@ -1,12 +1,12 @@
 import { FastifyInstance } from 'fastify'
 import { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod'
-import { prisma } from '../lib/prisma'
-import { ClientError } from '../errors/client-error'
+import { prisma } from '../../lib/prisma'
+import { ClientError } from '../../errors/client-error'
 
-export async function getParticipants(app: FastifyInstance) {
+export async function getLinks(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().get(
-    '/trips/:tripId/participants',
+    '/trips/:tripId/links',
     {
       schema: {
         params: z.object({
@@ -22,14 +22,7 @@ export async function getParticipants(app: FastifyInstance) {
           id: tripId,
         },
         include: {
-          participants: {
-            select: {
-              id: true,
-              name: true,
-              email: true,
-              is_confirmed: true,
-            },
-          },
+          links: true,
         },
       })
 
@@ -37,7 +30,7 @@ export async function getParticipants(app: FastifyInstance) {
         throw new ClientError('Trip not found.')
       }
 
-      return { participants: trip.participants }
+      return { links: trip.links }
     },
   )
 }
