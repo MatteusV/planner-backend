@@ -37,7 +37,7 @@ export async function createTrip(app: FastifyInstance) {
 
         const user = await prisma.user.findUnique({
           where: {
-            id: userId!,
+            id: userId,
           },
         })
 
@@ -51,7 +51,7 @@ export async function createTrip(app: FastifyInstance) {
 
         const trip = await prisma.trip.create({
           data: {
-            user_id: userId!,
+            user_id: userId,
             destination,
             ends_at,
             starts_at,

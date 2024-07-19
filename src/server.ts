@@ -29,9 +29,6 @@ import { authenticateUser } from './routes/user/authenticante-user'
 
 const app = fastify()
 
-app.setValidatorCompiler(validatorCompiler)
-app.setSerializerCompiler(serializerCompiler)
-
 app.register(cors, {
   origin: '*',
 })
@@ -47,6 +44,9 @@ app.register(fastifyJwt, {
     expiresIn: '10m',
   },
 })
+
+app.setValidatorCompiler(validatorCompiler)
+app.setSerializerCompiler(serializerCompiler)
 
 app.setErrorHandler(errorHandler)
 

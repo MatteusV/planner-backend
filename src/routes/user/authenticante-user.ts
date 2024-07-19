@@ -19,7 +19,7 @@ export async function authenticateUser(app: FastifyInstance) {
     async (request, reply) => {
       const { email, password } = request.body
 
-      const user = await prisma.user.findFirst({
+      const user = await prisma.user.findUnique({
         where: {
           email,
         },
@@ -36,6 +36,7 @@ export async function authenticateUser(app: FastifyInstance) {
       }
 
       const token = await reply.jwtSign({ sign: { sub: user.id } })
+
       const refreshToken = await reply.jwtSign({
         sign: {
           sub: user.id,
@@ -46,9 +47,6 @@ export async function authenticateUser(app: FastifyInstance) {
       return reply
         .setCookie('refreshToken', refreshToken, {
           path: '/',
-          secure: true,
-          sameSite: true,
-          httpOnly: true,
         })
         .status(200)
         .send({
