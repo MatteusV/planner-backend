@@ -14,8 +14,11 @@ export async function createInvite(app: FastifyInstance) {
     {
       schema: {
         body: z.object({
-          email: z.string().email(),
-          name: z.string().nullable(),
+          email: z
+            .string()
+            .email()
+            .transform((email) => email.toLocaleLowerCase()),
+          name: z.string(),
         }),
 
         params: z.object({

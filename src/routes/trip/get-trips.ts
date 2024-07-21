@@ -14,19 +14,20 @@ export async function getTrips(app: FastifyInstance) {
         }),
       },
     },
-    async (request) => {
+    async (request, reply) => {
       const { userId } = request.params
 
       const trips = await prisma.trip.findMany({
         where: {
           user_id: userId,
         },
-        select: {
-          id: true,
-          destination: true,
-          ends_at: true,
-          starts_at: true,
-          is_confirmed: true,
+        include: {
+          participants: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
         },
       })
 
@@ -34,7 +35,7 @@ export async function getTrips(app: FastifyInstance) {
         throw new ClientError('Trips not found.')
       }
 
-      return { trips }
+      return reply.status(200).send({ trips })
     },
   )
 }

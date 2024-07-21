@@ -11,7 +11,12 @@ export async function authenticateUser(app: FastifyInstance) {
     {
       schema: {
         body: z.object({
-          email: z.string().email(),
+          email: z
+            .string()
+            .email()
+            .transform((email) => {
+              return email.toLocaleLowerCase()
+            }),
           password: z.string(),
         }),
       },
@@ -47,6 +52,7 @@ export async function authenticateUser(app: FastifyInstance) {
       return reply
         .setCookie('refreshToken', refreshToken, {
           path: '/',
+          httpOnly: true,
         })
         .status(200)
         .send({

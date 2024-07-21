@@ -1,0 +1,9 @@
+services:
+  planner-pg:
+    image: bitnami/postgresql
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRESQL_USERNAME=planner
+      - POSTGRESQL_PASSWORD=planner
+      - POSTGRESQL_DATABASE=planner-db

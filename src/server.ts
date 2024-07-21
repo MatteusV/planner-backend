@@ -26,6 +26,8 @@ import { deleteLink } from './routes/link/delete-link'
 import { getTrips } from './routes/trip/get-trips'
 import { registerUser } from './routes/user/register-user'
 import { authenticateUser } from './routes/user/authenticante-user'
+import { getUserByToken } from './routes/user/get-user-by-token'
+import { deleteTrip } from './routes/trip/delete-trip'
 
 const app = fastify()
 
@@ -33,7 +35,10 @@ app.register(cors, {
   origin: '*',
 })
 
-app.register(fastifyCookie)
+app.register(fastifyCookie, {
+  secret: 'planner-secret',
+  algorithm: '',
+})
 app.register(fastifyJwt, {
   secret: env.JWT_SECRET,
   cookie: {
@@ -43,6 +48,7 @@ app.register(fastifyJwt, {
   sign: {
     expiresIn: '10m',
   },
+  decode: { complete: true },
 })
 
 app.setValidatorCompiler(validatorCompiler)
@@ -50,23 +56,34 @@ app.setSerializerCompiler(serializerCompiler)
 
 app.setErrorHandler(errorHandler)
 
-app.register(createTrip)
-app.register(confirmTrip)
+// participants
 app.register(confirmParticipant)
-app.register(createActivity)
-app.register(getActivities)
-app.register(createLink)
-app.register(getLinks)
 app.register(getParticipants)
-app.register(createInvite)
-app.register(updateTrip)
-app.register(getTripDetails)
-app.register(getParticipant)
 app.register(deleteParticipant)
-app.register(deleteLink)
-app.register(getTrips)
+app.register(getParticipant)
+
+// users
 app.register(registerUser)
 app.register(authenticateUser)
+app.register(getUserByToken)
+
+// activities
+app.register(createActivity)
+app.register(getActivities)
+
+// trips
+app.register(deleteTrip)
+app.register(getTrips)
+app.register(createTrip)
+app.register(confirmTrip)
+app.register(updateTrip)
+app.register(getTripDetails)
+app.register(createInvite)
+
+// links
+app.register(createLink)
+app.register(getLinks)
+app.register(deleteLink)
 
 app.listen({ host: '0.0.0.0', port: env.PORT ?? 3333 }).then(() => {
   console.log('Server is running')

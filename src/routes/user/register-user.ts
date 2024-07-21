@@ -12,7 +12,12 @@ export async function registerUser(app: FastifyInstance) {
       schema: {
         body: z.object({
           name: z.string(),
-          email: z.string().email(),
+          email: z
+            .string()
+            .email()
+            .transform((email) => {
+              return email.toLocaleLowerCase()
+            }),
           password: z.string().min(4),
         }),
       },
@@ -24,7 +29,7 @@ export async function registerUser(app: FastifyInstance) {
 
       const user = await prisma.user.create({
         data: {
-          email,
+          email: email.toLocaleLowerCase(),
           name,
           password: passwordHash,
         },
