@@ -2,6 +2,7 @@ import fastify from 'fastify'
 import fastifyCookie from '@fastify/cookie'
 import cors from '@fastify/cors'
 import fastifyJwt from '@fastify/jwt'
+import fastifyMulter from 'fastify-multer'
 
 import { createTrip } from './routes/trip/create-trip'
 import { confirmTrip } from './routes/trip/confirm-trip'
@@ -28,6 +29,7 @@ import { registerUser } from './routes/user/register-user'
 import { authenticateUser } from './routes/user/authenticante-user'
 import { getUserByToken } from './routes/user/get-user-by-token'
 import { deleteTrip } from './routes/trip/delete-trip'
+import { uploadImageTrip } from './routes/trip/upload-image-trip'
 
 const app = fastify()
 
@@ -50,6 +52,7 @@ app.register(fastifyJwt, {
   },
   decode: { complete: true },
 })
+app.register(fastifyMulter.contentParser)
 
 app.setValidatorCompiler(validatorCompiler)
 app.setSerializerCompiler(serializerCompiler)
@@ -79,6 +82,7 @@ app.register(confirmTrip)
 app.register(updateTrip)
 app.register(getTripDetails)
 app.register(createInvite)
+app.register(uploadImageTrip)
 
 // links
 app.register(createLink)

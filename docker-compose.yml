@@ -6,4 +6,4 @@ services:
     environment:
       - POSTGRESQL_USERNAME=planner
       - POSTGRESQL_PASSWORD=planner
-      - POSTGRESQL_DATABASE=planner-db
+      - POSTGRESQL_DATABASE=planner

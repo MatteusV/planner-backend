@@ -29,7 +29,7 @@ export async function getUserByToken(app: FastifyInstance) {
           email: true,
           id: true,
           name: true,
-          imageUrl: true,
+          image_url: true,
         },
       })
 
