@@ -4,7 +4,7 @@ import { z } from 'zod'
 import { upload } from '../middlewares/fastify-multer'
 import { ClientError } from '../../errors/client-error'
 import { supabase } from '../../lib/supabase'
-import { readFileSync } from 'fs'
+import { readFileSync, unlink } from 'fs'
 import { prisma } from '../../lib/prisma'
 
 interface FileInRequest extends FastifyRequest {
@@ -47,11 +47,16 @@ export async function uploadImageTrip(app: FastifyInstance) {
           .from('pictures-trips')
           .upload(file.filename, fileBuffer, { contentType: 'image/*' })
 
+        unlink(file.path, (error) => {
+          if (error) {
+            console.log(error)
+          }
+        })
         if (error) {
           return reply.status(500).send({ message: error.message })
         }
 
-        const image = await supabase.storage
+        const image = supabase.storage
           .from('pictures-trips')
           .getPublicUrl(data.path)
 
